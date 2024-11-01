@@ -1,0 +1,13 @@
+﻿{
+  "applications": {
+    "Acme.SystemOfCourses.Web": {
+      "type": "dotnet-project",
+      "launchUrl": "https://localhost:44398",
+      "path": "../../../src/Acme.SystemOfCourses.Web/Acme.SystemOfCourses.Web.csproj",
+      "kubernetesService": ".*-web$",
+      "execution": {
+        "order": 2
+      }
+    }
+  }
+}
