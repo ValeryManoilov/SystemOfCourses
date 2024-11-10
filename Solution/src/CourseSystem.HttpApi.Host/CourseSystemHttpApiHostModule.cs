@@ -40,6 +40,7 @@ using Volo.Abp.Swashbuckle;
 using Volo.Abp.Studio.Client.AspNetCore;
 using Volo.Abp.Security.Claims;
 using CourseSystem.Filters;
+using Volo.Abp.Caching.StackExchangeRedis;
 
 namespace CourseSystem;
 
@@ -55,7 +56,8 @@ namespace CourseSystem;
     typeof(AbpSwashbuckleModule),
     typeof(AbpAspNetCoreSerilogModule)
     )]
-public class CourseSystemHttpApiHostModule : AbpModule
+[DependsOn(typeof(AbpCachingStackExchangeRedisModule))]
+    public class CourseSystemHttpApiHostModule : AbpModule
 {
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
