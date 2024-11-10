@@ -1,19 +1,11 @@
 version: '3.4'
 
 services:
-  app:
-    image: coursesystem-host:latest
-    build:
-      context: ./src/CourseSystem.HttpApi.Host
-      dockerfile: Dockerfile
-    ports:
-      - "8040:80"
-    environment:
-      - REDIS__CONFIGURATION=redis:6379  # указание конфигурации Redis
-    depends_on:
-      - redis
-
   redis:
     image: redis:alpine
     ports:
       - "6379:6379"
+  rabbitmq:
+    image: rabbitmq:latest
+    ports:
+      - 15672:15672
