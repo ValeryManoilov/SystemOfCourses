@@ -254,17 +254,17 @@ paket-files/
 # ABP Studio
 **/.abpstudio/
 
-# SystemOfCourses
-src/Acme.SystemOfCourses.Web/Logs/*
-src/Acme.SystemOfCourses.Web.Host/Logs/*
-src/Acme.SystemOfCourses.Web.Public/Logs/*
-src/Acme.SystemOfCourses.Web.Public.Host/Logs/*
-src/Acme.SystemOfCourses.AuthServer/Logs/*
-src/Acme.SystemOfCourses.HttpApi.Host/Logs/*
-src/Acme.SystemOfCourses.HttpApi.HostWithIds/Logs/*
-src/Acme.SystemOfCourses.DbMigrator/Logs/*
-src/Acme.SystemOfCourses.Blazor.Server/Logs/*
-src/Acme.SystemOfCourses.Blazor.Server.Tiered/Logs/*
+# CourseSystem
+src/CourseSystem.Web/Logs/*
+src/CourseSystem.Web.Host/Logs/*
+src/CourseSystem.Web.Public/Logs/*
+src/CourseSystem.Web.Public.Host/Logs/*
+src/CourseSystem.AuthServer/Logs/*
+src/CourseSystem.HttpApi.Host/Logs/*
+src/CourseSystem.HttpApi.Host/Logs/*
+src/CourseSystem.DbMigrator/Logs/*
+src/CourseSystem.Blazor.Server/Logs/*
+src/CourseSystem.Blazor.Server.Tiered/Logs/*
 
 # Use abp install-libs to restore.
 **/wwwroot/libs/*
