@@ -221,7 +221,7 @@ namespace CourseSystem;
     {
         var app = context.GetApplicationBuilder();
         var env = context.GetEnvironment();
-
+        
         app.UseForwardedHeaders();
 
         if (env.IsDevelopment())

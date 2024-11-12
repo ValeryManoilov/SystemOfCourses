@@ -17,7 +17,7 @@ public class CourseSystemDbContextFactory : IDesignTimeDbContextFactory<CourseSy
         CourseSystemEfCoreEntityExtensionMappings.Configure();
 
         var builder = new DbContextOptionsBuilder<CourseSystemDbContext>()
-            .UseSqlServer(configuration.GetConnectionString("Default"));
+            .UseNpgsql(configuration.GetConnectionString("Default"));
         
         return new CourseSystemDbContext(builder.Options);
     }

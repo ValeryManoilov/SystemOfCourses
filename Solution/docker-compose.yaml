@@ -10,3 +10,11 @@ services:
     ports:
       - 15672:15672
       - 5672:5672
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: CourseSystem
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: batareyka
+    ports:
+      - "5432:5432"
