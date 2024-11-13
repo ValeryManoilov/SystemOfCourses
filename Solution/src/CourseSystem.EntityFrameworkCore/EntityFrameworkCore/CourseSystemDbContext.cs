@@ -14,6 +14,7 @@ using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.OpenIddict.EntityFrameworkCore;
 using Volo.Abp.TenantManagement;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
+using CourseSystem.Models;
 
 namespace CourseSystem.EntityFrameworkCore;
 
@@ -26,6 +27,10 @@ public class CourseSystemDbContext :
     IIdentityDbContext
 {
     /* Add DbSet properties for your Aggregate Roots / Entities here. */
+
+    public DbSet<Course> Courses { get; set; }
+    public DbSet<Lesson> Lessons { get; set; }
+    public DbSet<Tag> Tags { get; set; }
 
 
     #region Entities from the modules
@@ -78,14 +83,39 @@ public class CourseSystemDbContext :
         builder.ConfigureOpenIddict();
         builder.ConfigureTenantManagement();
         builder.ConfigureBlobStoring();
-        
+
         /* Configure your own tables/entities inside here */
 
-        //builder.Entity<YourEntity>(b =>
-        //{
-        //    b.ToTable(CourseSystemConsts.DbTablePrefix + "YourEntities", CourseSystemConsts.DbSchema);
-        //    b.ConfigureByConvention(); //auto configure for the base class props
-        //    //...
-        //});
+        builder.Entity<Course>(c =>
+        {
+            c.ToTable(CourseSystemConsts.DbTablePrefix + "Courses", CourseSystemConsts.DbSchema);
+            c.ConfigureByConvention();
+            c.Property(x => x.Id).IsRequired();
+            c.Property(x => x.CourseName).IsRequired();
+            c.Property(x => x.Description).IsRequired();
+
+            c.HasMany(c => c.Lessons).WithOne(l => l.LessonCourse);
+        });
+
+        builder.Entity<Lesson>(l =>
+        {
+            l.ToTable(CourseSystemConsts.DbTablePrefix + "Lessons", CourseSystemConsts.DbSchema);
+            l.ConfigureByConvention();
+            l.Property(x => x.Id).IsRequired();
+            l.Property(x => x.CourseId).IsRequired();
+            l.Property(x => x.Description).IsRequired().HasMaxLength(1000);
+            l.Property(x => x.Route).IsRequired().HasMaxLength(200);
+            l.Property(x => x.Date).IsRequired();
+
+            l.HasMany(l => l.LessonTags).WithMany(t => t.TagLessons);
+        });
+
+        builder.Entity<Tag>(t =>
+        {
+            t.ToTable(CourseSystemConsts.DbTablePrefix + "Tags", CourseSystemConsts.DbSchema);
+            t.ConfigureByConvention();
+            t.Property(x => x.Id).IsRequired();
+            t.Property(x => x.TagName).IsRequired().HasMaxLength(200);
+        });
     }
 }
