@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace CourseSystem.Migrations
 {
     /// <inheritdoc />
-    public partial class Initialize_Tables : Migration
+    public partial class Change_Tables_1 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -786,6 +786,7 @@ namespace CourseSystem.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    LessonName = table.Column<string>(type: "text", nullable: false),
                     CourseId = table.Column<Guid>(type: "uuid", nullable: false),
                     Date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     Route = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
@@ -867,21 +868,28 @@ namespace CourseSystem.Migrations
                 name: "LessonTag",
                 columns: table => new
                 {
-                    LessonTagsId = table.Column<Guid>(type: "uuid", nullable: false),
-                    TagLessonsId = table.Column<Guid>(type: "uuid", nullable: false)
+                    LessonId = table.Column<Guid>(type: "uuid", nullable: false),
+                    TagId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    ExtraProperties = table.Column<string>(type: "text", nullable: false),
+                    ConcurrencyStamp = table.Column<string>(type: "character varying(40)", maxLength: 40, nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CreatorId = table.Column<Guid>(type: "uuid", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    LastModifierId = table.Column<Guid>(type: "uuid", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_LessonTag", x => new { x.LessonTagsId, x.TagLessonsId });
+                    table.PrimaryKey("PK_LessonTag", x => new { x.LessonId, x.TagId });
                     table.ForeignKey(
-                        name: "FK_LessonTag_AppLessons_TagLessonsId",
-                        column: x => x.TagLessonsId,
+                        name: "FK_LessonTag_AppLessons_LessonId",
+                        column: x => x.LessonId,
                         principalTable: "AppLessons",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_LessonTag_AppTags_LessonTagsId",
-                        column: x => x.LessonTagsId,
+                        name: "FK_LessonTag_AppTags_TagId",
+                        column: x => x.TagId,
                         principalTable: "AppTags",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -1163,9 +1171,9 @@ namespace CourseSystem.Migrations
                 column: "CourseId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_LessonTag_TagLessonsId",
+                name: "IX_LessonTag_TagId",
                 table: "LessonTag",
-                column: "TagLessonsId");
+                column: "TagId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_OpenIddictApplications_ClientId",

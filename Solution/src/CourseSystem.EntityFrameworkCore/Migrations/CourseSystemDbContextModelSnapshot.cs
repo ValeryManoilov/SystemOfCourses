@@ -114,6 +114,10 @@ namespace CourseSystem.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("LastModifierId");
 
+                    b.Property<string>("LessonName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("Route")
                         .IsRequired()
                         .HasMaxLength(200)
@@ -124,6 +128,52 @@ namespace CourseSystem.Migrations
                     b.HasIndex("CourseId");
 
                     b.ToTable("AppLessons", (string)null);
+                });
+
+            modelBuilder.Entity("CourseSystem.Models.LessonTag", b =>
+                {
+                    b.Property<Guid>("LessonId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("TagId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("character varying(40)")
+                        .HasColumnName("ConcurrencyStamp");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("CreationTime");
+
+                    b.Property<Guid?>("CreatorId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("CreatorId");
+
+                    b.Property<string>("ExtraProperties")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("ExtraProperties");
+
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("LastModificationTime");
+
+                    b.Property<Guid?>("LastModifierId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("LastModifierId");
+
+                    b.HasKey("LessonId", "TagId");
+
+                    b.HasIndex("TagId");
+
+                    b.ToTable("LessonTag");
                 });
 
             modelBuilder.Entity("CourseSystem.Models.Tag", b =>
@@ -167,21 +217,6 @@ namespace CourseSystem.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("AppTags", (string)null);
-                });
-
-            modelBuilder.Entity("LessonTag", b =>
-                {
-                    b.Property<Guid>("LessonTagsId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("TagLessonsId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("LessonTagsId", "TagLessonsId");
-
-                    b.HasIndex("TagLessonsId");
-
-                    b.ToTable("LessonTag");
                 });
 
             modelBuilder.Entity("Volo.Abp.AuditLogging.AuditLog", b =>
@@ -2055,28 +2090,30 @@ namespace CourseSystem.Migrations
 
             modelBuilder.Entity("CourseSystem.Models.Lesson", b =>
                 {
-                    b.HasOne("CourseSystem.Models.Course", "LessonCourse")
+                    b.HasOne("CourseSystem.Models.Course", null)
                         .WithMany("Lessons")
                         .HasForeignKey("CourseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("LessonCourse");
                 });
 
-            modelBuilder.Entity("LessonTag", b =>
+            modelBuilder.Entity("CourseSystem.Models.LessonTag", b =>
                 {
-                    b.HasOne("CourseSystem.Models.Tag", null)
-                        .WithMany()
-                        .HasForeignKey("LessonTagsId")
+                    b.HasOne("CourseSystem.Models.Lesson", "Lesson")
+                        .WithMany("LessonTags")
+                        .HasForeignKey("LessonId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CourseSystem.Models.Lesson", null)
-                        .WithMany()
-                        .HasForeignKey("TagLessonsId")
+                    b.HasOne("CourseSystem.Models.Tag", "Tag")
+                        .WithMany("LessonTags")
+                        .HasForeignKey("TagId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Lesson");
+
+                    b.Navigation("Tag");
                 });
 
             modelBuilder.Entity("Volo.Abp.AuditLogging.AuditLogAction", b =>
@@ -2233,6 +2270,16 @@ namespace CourseSystem.Migrations
             modelBuilder.Entity("CourseSystem.Models.Course", b =>
                 {
                     b.Navigation("Lessons");
+                });
+
+            modelBuilder.Entity("CourseSystem.Models.Lesson", b =>
+                {
+                    b.Navigation("LessonTags");
+                });
+
+            modelBuilder.Entity("CourseSystem.Models.Tag", b =>
+                {
+                    b.Navigation("LessonTags");
                 });
 
             modelBuilder.Entity("Volo.Abp.AuditLogging.AuditLog", b =>

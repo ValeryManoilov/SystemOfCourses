@@ -11,6 +11,6 @@ namespace CourseSystem.Models
     {
         public Guid Id { get; set; }
         public string TagName { get; set; }
-        public virtual ICollection<Lesson> TagLessons { get; set; } = new List<Lesson>();
+        public virtual ICollection<LessonTag> LessonTags { get; set; } = new List<LessonTag>();
     }
 }

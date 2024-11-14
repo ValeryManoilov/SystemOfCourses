@@ -15,6 +15,7 @@ using Volo.Abp.OpenIddict.EntityFrameworkCore;
 using Volo.Abp.TenantManagement;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
 using CourseSystem.Models;
+using System.Reflection.Emit;
 
 namespace CourseSystem.EntityFrameworkCore;
 
@@ -94,7 +95,7 @@ public class CourseSystemDbContext :
             c.Property(x => x.CourseName).IsRequired();
             c.Property(x => x.Description).IsRequired();
 
-            c.HasMany(c => c.Lessons).WithOne(l => l.LessonCourse);
+            c.HasMany(c => c.Lessons).WithOne().HasForeignKey(l => l.CourseId);
         });
 
         builder.Entity<Lesson>(l =>
@@ -102,12 +103,11 @@ public class CourseSystemDbContext :
             l.ToTable(CourseSystemConsts.DbTablePrefix + "Lessons", CourseSystemConsts.DbSchema);
             l.ConfigureByConvention();
             l.Property(x => x.Id).IsRequired();
+            l.Property(x => x.LessonName).IsRequired();
             l.Property(x => x.CourseId).IsRequired();
             l.Property(x => x.Description).IsRequired().HasMaxLength(1000);
             l.Property(x => x.Route).IsRequired().HasMaxLength(200);
             l.Property(x => x.Date).IsRequired();
-
-            l.HasMany(l => l.LessonTags).WithMany(t => t.TagLessons);
         });
 
         builder.Entity<Tag>(t =>
@@ -117,5 +117,10 @@ public class CourseSystemDbContext :
             t.Property(x => x.Id).IsRequired();
             t.Property(x => x.TagName).IsRequired().HasMaxLength(200);
         });
+        builder.Entity<LessonTag>().HasKey(lt => new { lt.LessonId, lt.TagId });
+
+        builder.Entity<LessonTag>().HasOne(lt => lt.Lesson).WithMany(l => l.LessonTags).HasForeignKey(lt => lt.LessonId);
+
+        builder.Entity<LessonTag>().HasOne(lt => lt.Tag).WithMany(t => t.LessonTags).HasForeignKey(lt => lt.TagId);
     }
 }
